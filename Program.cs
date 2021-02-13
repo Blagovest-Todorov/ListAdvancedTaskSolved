@@ -26,138 +26,83 @@ namespace ListManupulation
                     {
                         Console.WriteLine(string.Join(' ', nums));
                     }
-                    
+
                     break;
                 }
 
-                List<string> givenCommand = command       
+                List<string> givenCommand = command
                     .Split()
                     .ToList();
 
-                // create an List of Commands
-
-                if (givenCommand[0] == "Add")
+                string action = givenCommand[0];  
+                
+                if (action == "Add")
                 {
-                    nums.Add(int.Parse(givenCommand[1]));
+                    string number = givenCommand[1];
+                    nums.Add(int.Parse(number));
                     actionCounter++;
                 }
 
-                if (givenCommand[0] == "Remove")
+                if (action == "Remove")
                 {
-                    nums.Remove(int.Parse(givenCommand[1]));
+                    string number = givenCommand[1];
+                    nums.Remove(int.Parse(number));
                     actionCounter++;
                 }
 
-                if (givenCommand[0] == "RemoveAt")
+                if (action == "RemoveAt")
                 {
-                    nums.RemoveAt(int.Parse(givenCommand[1]));
+                    string number = givenCommand[1];
+                    nums.RemoveAt(int.Parse(number));
                     actionCounter++;
                 }
 
-                if (givenCommand[0] == "Insert")
+                if (action == "Insert")
                 {
-                    nums.Insert(int.Parse(givenCommand[2]), int.Parse(givenCommand[1]));
+                    string index = givenCommand[2];
+                    string number = givenCommand[1];
+                    nums.Insert(int.Parse(index), int.Parse(number));
                     actionCounter++;
                 }
 
-                if (givenCommand[0] == "Contains")
+                if (action == "Contains")
                 {
-                    if (nums.Contains(int.Parse(givenCommand[1])))
+                    string number = givenCommand[1];
+
+                    if (nums.Contains(int.Parse(number)))
                     {
                         Console.WriteLine("Yes");
                     }
                     else
                     {
-                        Console.WriteLine("No such number");     
+                        Console.WriteLine("No such number");
                     }
                 }
 
-                if (givenCommand[0] == "PrintEven")
-                {  
+                if (action == "PrintEven")
+                {
                     List<int> evenNumbers = GetEvenNums(nums, LengthOfNums);
                     Console.WriteLine(string.Join(" ", evenNumbers));
                 }
 
-                if (givenCommand[0] == "PrintOdd")
+                if (action == "PrintOdd")
                 {
                     List<int> oddNumbers = GetOddNums(nums, LengthOfNums);
                     Console.WriteLine(string.Join(" ", oddNumbers));
                 }
 
-                if (givenCommand[0] == "GetSum")
-                {
-                    SumNumbers(nums);
+                if (action == "GetSum")
+                {                    
                     int sumElements = SumNumbers(nums);
                     Console.WriteLine(sumElements);
-                }
+                }                
 
-                if (givenCommand[0] == "Filter" && givenCommand[1] == ">=")
+                if (action == "Filter")
                 {
-                    int conditionNumber = int.Parse(givenCommand[2]);
-                    List<int> equalOrBigger = new List<int>(nums.Count);
-
-                    for (int i = 0; i < nums.Count; i++)
-                    {
-                        if (nums[i] >= conditionNumber)
-                        {
-                            equalOrBigger.Add(nums[i]);
-                        }                        
-                    }
-
-                    Console.WriteLine(string.Join(' ', equalOrBigger));
-                    // call method to get from nums bigger >= 43 numbers
-                    // GetBiggerNumbers(int num)
-                }
-
-                if (givenCommand[0] == "Filter" && givenCommand[1] == "<")
-                {
-                    int conditionNumber = int.Parse(givenCommand[2]);
-                    List<int> less = new List<int>(nums.Count);
-
-                    for (int i = 0; i < nums.Count; i++)
-                    {
-                        if (nums[i] < conditionNumber)
-                        {
-                            less.Add(nums[i]);
-                        }
-                    }
-
-                    Console.WriteLine(string.Join(' ', less));
-                }
-
-                if (givenCommand[0] == "Filter" && givenCommand[1] == "<=")
-                {
-                    int conditionNumber = int.Parse(givenCommand[2]);
-                    List<int> lessThanEqual = new List<int>(nums.Count);
-
-                    for (int i = 0; i < nums.Count; i++)
-                    {
-                        if (nums[i] <= conditionNumber)
-                        {
-                            lessThanEqual.Add(nums[i]);
-                        }
-                    }
-
-                    Console.WriteLine(string.Join(' ', lessThanEqual));
-
-                }
-
-                if ( givenCommand[0] == "Filter" && givenCommand[1] == ">")
-                {
-                    int conditionNumber = int.Parse(givenCommand[2]);
-                    List<int> biggerNums = new List<int>(nums.Count);
-
-                    for (int i = 0; i < nums.Count; i++)
-                    {
-                        if (nums[i] > conditionNumber)
-                        {
-                            biggerNums.Add(nums[i]);
-                        }
-                    }
-
-                    Console.WriteLine(string.Join(' ', biggerNums));
-                }
-
+                    string sign = givenCommand[1];
+                    int termNum = int.Parse(givenCommand[2]);
+                    GetNumsOnCondition(nums, sign, termNum);
+                }   
             }
         }
 
@@ -174,8 +119,8 @@ namespace ListManupulation
             }
 
             return even;
-        }        
-            
+        }
+
         static List<int> GetOddNums(List<int> nums, int LengthOfNums)
         {
             List<int> odd = new List<int>(LengthOfNums);
@@ -194,10 +139,36 @@ namespace ListManupulation
         static int SumNumbers(List<int> sumNumbers)
         {
             int sum = 0;
-
             sum = sumNumbers.Sum();
             return sum;
         }
 
+        static List<int> GetNumsOnCondition(List<int> nums, string signCondition, int termNum) 
+        {
+            List<int> result = new List<int>(nums.Count);
+
+            for (int i = 0; i < nums.Count; i++)
+            {
+                if (signCondition == "<" && nums[i] < termNum)
+                {
+                    result.Add(nums[i]);
+                }
+                else if ((signCondition == "<=" && nums[i] <= termNum))
+                {
+                    result.Add(nums[i]);
+                }
+                else if ((signCondition == ">" && nums[i] > termNum))
+                {
+                    result.Add(nums[i]);
+                }
+                else if ((signCondition == ">=" && nums[i] >= termNum))
+                {
+                    result.Add(nums[i]);
+                }               
+            }
+
+            Console.WriteLine(string.Join(" ", result));
+            return result;
+        }
     }
 }
